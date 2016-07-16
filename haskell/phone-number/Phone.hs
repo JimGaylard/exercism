@@ -1,15 +1,31 @@
 module Phone (areaCode, number, prettyPrint) where
 
-number :: String -> Maybe Integer
+import Data.Char (isDigit)
+
+number :: String -> Maybe String
 number x
-  | (length x) == 10 = Just (read x :: Integer)
-  | (length x) == 11 = validateFirst x
-  | (length x) > 11 || (length x) < 10 = Nothing
-    where validateFirst = undefined
+  | (length $ digits x) == 10 = Just (digits x)
+  | (length $ digits x) == 11 = validateFirst x
+  | otherwise = Nothing
+    where validateFirst y
+            | head y == '1' = Just (drop 1 y)
+            | otherwise = Nothing
+          digits = filter isDigit
 
-areaCode :: Integer -> Maybe Integer
-areaCode = undefined
+areaCode :: String -> Maybe String
+areaCode x = case number x of
+               Nothing -> Nothing
+               Just y -> Just (take 3 y)
 
-prettyPrint :: Integer -> String
-prettyPrint = undefined
+formattedNumber :: String -> Maybe String
+formattedNumber x = case number x of
+               Nothing -> Nothing
+               Just y -> Just $ formattedNumber' y
+                 where formattedNumber' z = take 3 (drop 3 z) ++ "-" ++ drop 6 z
 
+prettyPrint :: String -> Maybe String
+prettyPrint x = do
+  num <- number x
+  area <- areaCode num
+  formatted <- formattedNumber num
+  Just ("(" ++ area ++ ")" ++ " " ++ formatted)
