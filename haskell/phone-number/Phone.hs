@@ -13,9 +13,7 @@ number x =
         _  -> Nothing
 
 areaCode :: String -> Maybe String
-areaCode x = case number x of
-               Nothing -> Nothing
-               Just y -> Just (take 3 y)
+areaCode x = take 3 <$> number x
 
 formattedNumber :: String -> Maybe String
 formattedNumber x = case number x of
