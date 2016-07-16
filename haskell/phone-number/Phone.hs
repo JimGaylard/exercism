@@ -3,14 +3,14 @@ module Phone (areaCode, number, prettyPrint) where
 import Data.Char (isDigit)
 
 number :: String -> Maybe String
-number x
-  | (length $ digits x) == 10 = Just (digits x)
-  | (length $ digits x) == 11 = validateFirst x
-  | otherwise = Nothing
-    where validateFirst y
-            | head y == '1' = Just (drop 1 y)
-            | otherwise = Nothing
-          digits = filter isDigit
+number x =
+  let clean = filter isDigit x in
+      case length clean of
+        10 -> Just clean
+        11 -> if head clean == '1'
+                        then Just (tail clean)
+                        else Nothing
+        _  -> Nothing
 
 areaCode :: String -> Maybe String
 areaCode x = case number x of
