@@ -15,14 +15,16 @@ number x =
 areaCode :: String -> Maybe String
 areaCode x = take 3 <$> number x
 
-formattedNumber :: String -> Maybe String
-formattedNumber x = (\y -> f y ++ "-" ++ l y) <$> number x
-  where f = take 3 . drop 3
-        l = reverse . take 4 . reverse
+firstNum :: String -> Maybe String
+firstNum x = take 3 . drop 3 <$> number x
+
+lastNum :: String -> Maybe String
+lastNum x = reverse . take 4 . reverse <$> number x
 
 prettyPrint :: String -> Maybe String
 prettyPrint x = do
   num <- number x
   area <- areaCode num
-  formatted <- formattedNumber num
-  Just ("(" ++ area ++ ")" ++ " " ++ formatted)
+  first <- firstNum num
+  last' <- lastNum num
+  Just ("(" ++ area ++ ") " ++ first ++ "-" ++ last')
