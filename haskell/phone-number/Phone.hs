@@ -16,10 +16,9 @@ areaCode :: String -> Maybe String
 areaCode x = take 3 <$> number x
 
 formattedNumber :: String -> Maybe String
-formattedNumber x = case number x of
-               Nothing -> Nothing
-               Just y -> Just $ formattedNumber' y
-                 where formattedNumber' z = take 3 (drop 3 z) ++ "-" ++ drop 6 z
+formattedNumber x = (\y -> f y ++ "-" ++ l y) <$> number x
+  where f = take 3 . drop 3
+        l = reverse . take 4 . reverse
 
 prettyPrint :: String -> Maybe String
 prettyPrint x = do
