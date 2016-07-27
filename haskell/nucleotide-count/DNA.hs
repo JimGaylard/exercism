@@ -20,10 +20,10 @@ badNucleotide :: String -> Char
 badNucleotide = head . filter notNucleotide
 
 notNucleotide :: Char -> Bool
-notNucleotide x = x `notElem` nucleotides
+notNucleotide = (`notElem` nucleotides)
 
 nucMap :: M.Map Char Int
-nucMap = M.fromList [('A', 0), ('C', 0), ('G', 0), ('T', 0)]
+nucMap = M.fromList $ zip nucleotides $ repeat 0
 
 nucleotideCounts :: String -> Either String (M.Map Char Int)
 nucleotideCounts xs
