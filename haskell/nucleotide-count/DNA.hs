@@ -2,28 +2,30 @@ module DNA (count, nucleotideCounts) where
 
 import qualified Data.Map as M
 
-type Nucleotide = Char
-type Strand = String
-type ErrorString = String
-type Count = Int
-
-nucleotides :: [Char]
+nucleotides :: String
 nucleotides = "ACGT"
 
-count :: Nucleotide -> Strand -> Either ErrorString Count
+count :: Char -> String -> Either String Int
 count x xs
   | notAllNucleotides (x:xs) = Left $ "invalid nucleotide '" ++ badNucleotide (x:xs) : "'"
   | otherwise = Right $ count' x xs
-    where count' x' xs' = length $ filter (==x') xs'
 
-notAllNucleotides :: Strand -> Bool
+count' :: Char -> String -> Int
+count' x xs = length $ filter (==x) xs
+
+notAllNucleotides :: String -> Bool
 notAllNucleotides = any notNucleotide
 
-badNucleotide :: Strand -> Char
+badNucleotide :: String -> Char
 badNucleotide = head . filter notNucleotide
 
-notNucleotide :: Nucleotide -> Bool
-notNucleotide x = not $ elem x nucleotides
+notNucleotide :: Char -> Bool
+notNucleotide x = x `notElem` nucleotides
+
+nucMap :: M.Map Char Int
+nucMap = M.fromList [('A', 0), ('C', 0), ('G', 0), ('T', 0)]
 
 nucleotideCounts :: String -> Either String (M.Map Char Int)
-nucleotideCounts xs = fmap count xs
+nucleotideCounts xs
+  | notAllNucleotides xs = Left $ "invalid nucleotide '" ++ badNucleotide xs : "'"
+  | otherwise = Right $ foldr (\x y -> M.insert x (count' x nucleotides) y) nucMap xs
