@@ -28,4 +28,4 @@ nucMap = M.fromList [('A', 0), ('C', 0), ('G', 0), ('T', 0)]
 nucleotideCounts :: String -> Either String (M.Map Char Int)
 nucleotideCounts xs
   | notAllNucleotides xs = Left $ "invalid nucleotide '" ++ badNucleotide xs : "'"
-  | otherwise = Right $ foldr (\x y -> M.insert x (count' x nucleotides) y) nucMap xs
+  | otherwise = Right $ foldr (\x y -> M.insert x (count' x xs) y) nucMap xs
