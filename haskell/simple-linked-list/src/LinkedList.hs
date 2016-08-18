@@ -13,26 +13,31 @@ module LinkedList
 -- The task is to create the data type `LinkedList`
 -- and implement the functions below.
 
+data LinkedList a = Nil | Cons a (LinkedList a)
+
 datum :: LinkedList a -> a
-datum = undefined
+datum (Cons x xs) = x
 
 fromList :: [a] -> LinkedList a
-fromList = undefined
+fromList [] = Nil
+fromList (x : xs) = Cons x (fromList xs)
 
 isNil :: LinkedList a -> Bool
-isNil = undefined
+isNil Nil = True
+isNil _ = False
 
 new :: a -> LinkedList a -> LinkedList a
-new = undefined
+new x xs = Cons x xs
 
 next :: LinkedList a -> LinkedList a
-next = undefined
+next (Cons x xs) = xs
 
 nil :: LinkedList a
-nil = undefined
+nil = Nil
 
 reverseLinkedList :: LinkedList a -> LinkedList a
-reverseLinkedList = undefined
+reverseLinkedList x = fromList $ reverse (toList x)
 
 toList :: LinkedList a -> [a]
-toList = undefined
+toList Nil = []
+toList (Cons x xs) = x : toList xs
