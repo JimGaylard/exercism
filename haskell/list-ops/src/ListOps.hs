@@ -19,7 +19,7 @@ foldl' f s (x:xs) = let s' = f s x in
 
 foldr :: (a -> b -> b) -> b -> [a] -> b
 foldr _ s [] = s
-foldr f s (x:xs) = f x (foldr f s xs)
+foldr f s (x:xs) = f x $ foldr f s xs
 
 length :: [a] -> Int
 length [] = 0
