@@ -23,7 +23,7 @@ main = exitProperly $ runTestTT $ TestList
 
 
 big :: Int
-big = 100000
+big = 1000
 
 listOpsTests :: [Test]
 listOpsTests =
