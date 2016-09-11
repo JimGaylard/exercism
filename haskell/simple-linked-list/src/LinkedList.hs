@@ -15,32 +15,33 @@ module LinkedList
 
 data LinkedList a = Nil | Cons a (LinkedList a) deriving (Show)
 
-instance Foldable (LinkedList) where
-  foldr f z Nil = z
-  foldr f b (Cons x xs) = foldr f (f x b) xs
+instance Foldable LinkedList where
+  foldr _ z Nil = z
+  foldr f b (Cons x xs) = f x (foldr f b xs)
 
 datum :: LinkedList a -> a
-datum (Cons x xs) = x
+datum Nil = undefined
+datum (Cons x _) = x
 
 fromList :: [a] -> LinkedList a
-fromList [] = Nil
-fromList (x : xs) = Cons x (fromList xs)
+fromList = foldr Cons Nil
 
 isNil :: LinkedList a -> Bool
 isNil Nil = True
 isNil _ = False
 
 new :: a -> LinkedList a -> LinkedList a
-new x xs = Cons x xs
+new = Cons
 
 next :: LinkedList a -> LinkedList a
-next (Cons x xs) = xs
+next Nil = Nil
+next (Cons _ xs) = xs
 
 nil :: LinkedList a
 nil = Nil
 
 reverseLinkedList :: LinkedList a -> LinkedList a
-reverseLinkedList = foldr Cons Nil
+reverseLinkedList = foldl (flip Cons) Nil
 
 toList :: LinkedList a -> [a]
 toList Nil = []
