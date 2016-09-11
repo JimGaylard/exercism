@@ -22,8 +22,7 @@ foldr _ s [] = s
 foldr f s (x:xs) = f x $ foldr f s xs
 
 length :: [a] -> Int
-length [] = 0
-length (_:xs) = 1 + length xs
+length = foldl (\acc _ -> acc + 1) 0
 
 reverse :: [a] -> [a]
 reverse = foldl' (flip (:)) []
