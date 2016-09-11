@@ -1,6 +1,7 @@
 module WordCount (wordCount) where
 
-import Data.Char (toLower)
+import Data.Char (toLower, isAlphaNum)
+import Data.List.Split (splitWhen)
 
 import qualified Data.Map as M
 
@@ -8,10 +9,4 @@ wordCount :: String -> M.Map String Int
 wordCount s = M.fromListWith (+) $ zip (realWords s) (repeat 1)
 
 realWords :: String -> [String]
-realWords s = words $ map toLower (replace s)
-
-replace :: String -> String
-replace = map (\c -> if isOk c then c else ' ')
-
-isOk :: Char -> Bool
-isOk c = c `notElem` "_#&@$%^!?:'\",."
+realWords s = filter (/= "") $ splitWhen (not . isAlphaNum) $ map toLower s
