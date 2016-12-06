@@ -6,10 +6,10 @@ import System.Random (newStdGen, randomRs)
 -- The task is to create the data type `Robot`, as a
 -- mutable variable, and implement the functions below.
 
-newtype Robot = Robot { name :: String }
+type Robot = IORef String
 
-mkRobot :: IO (IORef Robot)
-mkRobot = Robot <$> mkRobotName >>= newIORef
+mkRobot :: IO Robot
+mkRobot = mkRobotName >>= newIORef
 
 mkRobotName :: IO String
 mkRobotName = do
@@ -17,10 +17,10 @@ mkRobotName = do
   numbers <- (take 3 . randomRs ('0', '9')) <$> newStdGen
   return (letters ++ numbers)
 
-resetName :: IORef Robot -> IO ()
+resetName :: Robot -> IO ()
 resetName rr = do
   newName <- mkRobotName
-  modifyIORef rr (\r -> r { name = newName })
+  modifyIORef rr $ const newName
 
-robotName :: IORef Robot -> IO String
-robotName rr = name <$> readIORef rr
+robotName :: Robot -> IO String
+robotName = readIORef
