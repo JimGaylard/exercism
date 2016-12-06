@@ -1,27 +1,26 @@
 module Robot (Robot, mkRobot, resetName, robotName) where
 
-import qualified System.Random as R
-import Data.Char (toUpper, intToDigit)
+import Data.IORef (IORef, newIORef, modifyIORef, readIORef)
+import System.Random (newStdGen, randomRs)
 
-data Robot = Robot { name :: String } deriving Show
+-- The task is to create the data type `Robot`, as a
+-- mutable variable, and implement the functions below.
 
-mkRobot :: IO Robot
-mkRobot = do
-  name' <- mkName
-  return $ Robot name'
+newtype Robot = Robot { name :: String }
 
-mkName :: IO String
-mkName = do
-  gen <- R.newStdGen
-  let letters = take 2 $ map toUpper $ R.randomRs ('a', 'z') gen :: String
-      numbers = take 3 $ R.randomRs (0, 9) gen :: [Int] in
-        return $ letters ++ map intToDigit numbers
+mkRobot :: IO (IORef Robot)
+mkRobot = Robot <$> mkRobotName >>= newIORef
 
-resetName :: Robot -> IO ()
-resetName x = do
-  name' <- mkName
-  pure x { name = name' }
-  return ()
+mkRobotName :: IO String
+mkRobotName = do
+  letters <- (take 2 . randomRs ('A','Z')) <$> newStdGen
+  numbers <- (take 3 . randomRs ('0', '9')) <$> newStdGen
+  return (letters ++ numbers)
 
-robotName :: Robot -> IO String
-robotName r = return $ name r
+resetName :: IORef Robot -> IO ()
+resetName rr = do
+  newName <- mkRobotName
+  modifyIORef rr (\r -> r { name = newName })
+
+robotName :: IORef Robot -> IO String
+robotName rr = name <$> readIORef rr
