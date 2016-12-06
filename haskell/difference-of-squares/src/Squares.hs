@@ -1,10 +1,10 @@
 module Squares (difference, squareOfSums, sumOfSquares) where
 
 difference :: Integral a => a -> a
-difference = undefined
+difference n = squareOfSums n - sumOfSquares n
 
 squareOfSums :: Integral a => a -> a
-squareOfSums = undefined
+squareOfSums n = sum [1..n]^2
 
 sumOfSquares :: Integral a => a -> a
-sumOfSquares = undefined
+sumOfSquares n = sum $ (^2) <$> [1..n]
