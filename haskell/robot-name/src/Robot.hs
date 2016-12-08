@@ -1,6 +1,6 @@
 module Robot (Robot, mkRobot, resetName, robotName) where
 
-import Data.IORef (IORef, newIORef, modifyIORef, readIORef)
+import Data.IORef (IORef, newIORef, readIORef, writeIORef)
 import System.Random (newStdGen, randomRs)
 
 -- The task is to create the data type `Robot`, as a
@@ -20,7 +20,7 @@ mkRobotName = do
 resetName :: Robot -> IO ()
 resetName rr = do
   newName <- mkRobotName
-  modifyIORef rr $ const newName
+  writeIORef rr newName
 
 robotName :: Robot -> IO String
 robotName = readIORef
