@@ -1,10 +1,11 @@
 module SumOfMultiples (sumOfMultiples) where
-import Data.List (union)
+
+import Data.List (nub)
 
 sumOfMultiples :: Integral a => [a] -> a -> a
-sumOfMultiples nums y = sum (uniqueMultiples nums y)
-
-uniqueMultiples :: Integral a => [a] -> a -> [a]
-uniqueMultiples [] _ = []
-uniqueMultiples (x:xs) y = union (filter multiple [1..y-1]) (uniqueMultiples xs y)
-  where multiple = (\z -> (mod z x) == 0)
+sumOfMultiples xs limit =
+  sum $ nub $ multiple <$> nats <*> xs
+        where multiple x y = if x `mod` y == 0
+                                then x
+                                else 0
+              nats = [1..limit - 1]
