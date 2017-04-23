@@ -3,13 +3,10 @@
   */
 class Bob {
   def hey(s: String) : String = s match {
-    case s if (s == s.toUpperCase()) && hasAlpha(s)=> "Whoa, chill out!"
+    case s if (s == s.toUpperCase())
+      && s.exists(x => x.isLetter)=> "Whoa, chill out!"
     case s if s.endsWith("?") => "Sure."
-    case s if s.trim() == "" => "Fine. Be that way!"
+    case s if s.trim.isEmpty => "Fine. Be that way!"
     case _ => "Whatever."
-  }
-
-  private[this] def hasAlpha(s: String) : Boolean = {
-    "[a-zA-Z]".r.findFirstIn(s).isDefined
   }
 }
