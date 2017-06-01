@@ -3,18 +3,17 @@ module Scrabble (scoreLetter, scoreWord) where
 import Data.Char (toLower)
 import Data.Map as M (Map, fromList, toList)
 import Data.Map.Lazy as ML (findWithDefault)
-import Data.Maybe
 
 scores :: Map Int String
 scores =
   fromList [
-               (1, ['A', 'E', 'I', 'O', 'U', 'L', 'N', 'R', 'S', 'T'])
-             , (2, ['D', 'G'])
-             , (3, ['B', 'C', 'M', 'P'])
-             , (4, ['F', 'H', 'V', 'W', 'Y'])
-             , (5, ['K'])
-             , (8, ['J', 'X'])
-             , (10, ['Q', 'Z'])
+               (1, "AEIOULNRST")
+             , (2, "DG")
+             , (3, "BCMP")
+             , (4, "FHVWY")
+             , (5, "K")
+             , (8, "JX")
+             , (10, "QZ")
              ]
 
 scoreLetter :: Char -> Int
