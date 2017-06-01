@@ -1,29 +1,27 @@
 module Scrabble (scoreLetter, scoreWord) where
 
-import Data.Map(Map, fromList)
+import Data.Char (toLower)
+import Data.Map as M (Map, fromList, toList, lookup)
+import Data.Maybe
 
-scores :: Map Char Int
-scores = fromList $
-  [
-  , [1, ['A', 'E', 'I', 'O', 'U', 'L', 'N', 'R', 'S', 'T']
-  , [2, ['D', 'G']
-  , [3, ['B', 'C', 'M', 'P']]
-  , [4, ['F', 'H', 'V', 'W', 'Y']]
-  , [5, ['K']]
-  , [8, ['J', 'X']]
-  , [10, ['Q', 'Z']]
-  ]
+scores :: Map Int String
+scores =
+  fromList [
+               (1, ['A', 'E', 'I', 'O', 'U', 'L', 'N', 'R', 'S', 'T'])
+             , (2, ['D', 'G'])
+             , (3, ['B', 'C', 'M', 'P'])
+             , (4, ['F', 'H', 'V', 'W', 'Y'])
+             , (5, ['K'])
+             , (8, ['J', 'X'])
+             , (10, ['Q', 'Z'])
+             ]
 
-scoreLetter = undefined
+scoreLetter :: Char -> Int
+scoreLetter a = fromMaybe 0 $ M.lookup (toLower a) $ transform scores where
+  transform = fromList . scoresIn . toList where
+    scoresIn = foldr ((++) . scoreIn) []
+    scoreIn :: (Int, String) -> [(Char, Int)]
+    scoreIn (i, ys) = zip (map toLower ys) (repeat i)
 
-scoreWord = undefined
-
-
--- Letter                           Value
--- A, E, I, O, U, L, N, R, S, T       1
--- D, G                               2
--- B, C, M, P                         3
--- F, H, V, W, Y                      4
--- K                                  5
--- J, X                               8
--- Q, Z                               10
+scoreWord :: String -> Int
+scoreWord word = sum $ fmap scoreLetter word
