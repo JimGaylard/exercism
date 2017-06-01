@@ -1,7 +1,8 @@
 module Scrabble (scoreLetter, scoreWord) where
 
 import Data.Char (toLower)
-import Data.Map as M (Map, fromList, toList, lookup)
+import Data.Map as M (Map, fromList, toList)
+import Data.Map.Lazy as ML (findWithDefault)
 import Data.Maybe
 
 scores :: Map Int String
@@ -17,7 +18,7 @@ scores =
              ]
 
 scoreLetter :: Char -> Int
-scoreLetter a = fromMaybe 0 $ M.lookup (toLower a) $ transform scores where
+scoreLetter a = ML.findWithDefault 0 (toLower a) $ transform scores where
   transform = fromList . scoresIn . toList where
     scoresIn = foldr ((++) . scoreIn) []
     scoreIn :: (Int, String) -> [(Char, Int)]
